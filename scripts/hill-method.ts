@@ -7,7 +7,7 @@ import { splitIntoBlocks } from "../src/lib/utils/split-into-blocks";
 import { Vector } from "../src/lib/vector";
 import { HillAction } from "../src/types/hill-action";
 
-class HillMethod {
+class HillMethodCLI {
     static async main(): Promise<void> {
         let exit = false;
         const memory = new Memory();
@@ -36,11 +36,11 @@ class HillMethod {
 
             switch (action) {
                 case HillAction.ENCRYPT:
-                    const encrypted = HillMethod.encrypt(text, key);
+                    const encrypted = HillMethodCLI.encrypt(text, key);
                     console.log(encrypted);
                     break;
                 case HillAction.DECRYPT:
-                    const decrypted = HillMethod.decrypt(text, key);
+                    const decrypted = HillMethodCLI.decrypt(text, key);
                     console.log(decrypted);
                     break;
             }
@@ -57,7 +57,7 @@ class HillMethod {
 
             const encrypted = key.multiplyByVector(vector);
 
-            result += HillMethod.parseToChars(encrypted.toArray());
+            result += HillMethodCLI.parseToChars(encrypted.toArray());
         });
 
         return result;
@@ -77,7 +77,7 @@ class HillMethod {
 
             const encrypted = inverse.multiplyByVector(vector);
 
-            result += HillMethod.parseToChars(encrypted.toArray());
+            result += HillMethodCLI.parseToChars(encrypted.toArray());
         });
 
         return result;
@@ -88,4 +88,4 @@ class HillMethod {
     }
 }
 
-HillMethod.main();
+HillMethodCLI.main();

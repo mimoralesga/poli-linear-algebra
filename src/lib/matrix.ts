@@ -25,7 +25,7 @@ export class Matrix {
             this.data.map((row) =>
                 matrix.data[0].map((_, j) =>
                     row.reduce(
-                        (acc, value, k) => acc + value * matrix.data[k][j],
+                        (acc, value, k) => acc + value * matrix.data[k][j] % 26,
                         0,
                     )
                 )
@@ -55,7 +55,12 @@ export class Matrix {
         const adj = Matrix.adjugate(matrix);
         const transposedAdj = Matrix.transpose(adj);
 
-        return transposedAdj;
+        const invDet = 1 / det;
+        const inverseMatrix = transposedAdj.toArray().map((row) =>
+            row.map((value) => Number((value * invDet).toFixed(3)))
+        );
+
+        return new Matrix(inverseMatrix);
     }
 
     static determinant(matrix: Matrix): number {
@@ -81,19 +86,6 @@ export class Matrix {
                 .filter((_, i) => i !== row)
                 .map((row) => row.filter((_, j) => j !== col)),
         );
-    }
-
-    static minor(matrix: Matrix): number {
-        /* return matrix.toArray().reduce(
-            (acc, row, i) =>
-                acc +
-                row.reduce(
-                    (acc, value, j) => acc + value * Matrix.cofactor(i, j),
-                    0,
-                ),
-            0,
-        ); */
-        return 0;
     }
 
     static adjugate(matrix: Matrix): Matrix {
@@ -136,6 +128,33 @@ export class Matrix {
             row.map((value) => (invDet * value + mod) % mod)
         );
         return new Matrix(inverse);
+    }
+
+    static findMatrixWithDeterminant1(range: number): number[][][] {
+        const matrixOfMatrix: number[][][] = [];
+        let matrix: number[][] = [];
+        let det = 0;
+
+        for (let a = -range; a <= range; a++) {
+            for (let b = -range; b <= range; b++) {
+                for (let c = -range; c <= range; c++) {
+                    matrix = [[a, b, c], [-2, 1, 0], [
+                        -1,
+                        -1,
+                        1,
+                    ]];
+                    det = Matrix.determinant(
+                        new Matrix(matrix),
+                    );
+
+                    if (det === 1) {
+                        matrixOfMatrix.push(matrix);
+                    }
+                }
+            }
+        }
+
+        return matrixOfMatrix;
     }
 
     toArray(): number[][] {

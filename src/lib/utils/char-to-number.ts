@@ -1,6 +1,6 @@
 export const charToNumber = (char: string): number => {
     const upperChar = char.toUpperCase();
-    if (upperChar === "-") {
+    if (upperChar === "_") {
         return 26;
     } else {
         const charCode = upperChar.charCodeAt(0);
